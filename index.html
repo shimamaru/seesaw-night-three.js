@@ -526,8 +526,8 @@ addPaw(sawLeftArm,  sawBodyMat, -1);
 addPaw(sawRightArm, sawBodyMat,  1);
 
 // Stern/cool eyes – narrower, angled inward at top
-const sawEyeL = sawMesh(new THREE.SphereGeometry(0.12, 8, 6), eyeMat, -0.2, 0.69, 0.58, 0.8, 1.1, 0.28);
-const sawEyeR = sawMesh(new THREE.SphereGeometry(0.12, 8, 6), eyeMat,  0.2, 0.69, 0.58, 0.8, 1.1, 0.28);
+const sawEyeL = sawMesh(new THREE.SphereGeometry(0.135, 8, 6), eyeMat, -0.2, 0.69, 0.585, 0.95, 1.35, 0.30);
+const sawEyeR = sawMesh(new THREE.SphereGeometry(0.135, 8, 6), eyeMat,  0.2, 0.69, 0.585, 0.95, 1.35, 0.30);
 sawEyeL.rotation.z =  0.30;
 sawEyeR.rotation.z = -0.30;
 sawMesh(new THREE.SphereGeometry(0.04, 8, 6), shineMat, -0.24, 0.74, 0.65, 1, 1, 0.22);
@@ -591,11 +591,133 @@ sawMesh(new THREE.BoxGeometry(0.22, 0.17, 0.015),
 sawMesh(new THREE.SphereGeometry(0.045, 6, 4),
   new THREE.MeshBasicMaterial({ color: '#2D8C4C' }), 0.59, 0.32, 0.215, 1, 0.75, 0.2);
 
+
+// ════════════════════════════════════════════════════════
+//  NIGHT FRIEND
+//  参照画像の雰囲気を see / saw と同じ世界観に寄せて追加
+// ════════════════════════════════════════════════════════
+const nightFriend = new THREE.Group();
+nightFriend.position.set(0.55, 0.28, 3.0);
+nightFriend.rotation.y = Math.atan2(-nightFriend.position.x, -nightFriend.position.z);
+nightFriend.scale.setScalar(0.68);
+scene.add(nightFriend);
+
+function nightMesh(geo, material, x, y, z, sx = 1, sy = 1, sz = 1) {
+  const m = new THREE.Mesh(geo, material);
+  m.position.set(x, y, z);
+  m.scale.set(sx, sy, sz);
+  m.castShadow = false;
+  m.receiveShadow = true;
+  nightFriend.add(m);
+  return m;
+}
+
+const nightBodyMat = mat('#4F6488');
+const nightDarkMat = mat('#3E5175');
+const nightLineMat = new THREE.MeshBasicMaterial({ color: '#566B8C' });
+const nightPatchMat = new THREE.MeshBasicMaterial({ color: '#7186A4' });
+const nightTagMat = new THREE.MeshBasicMaterial({ color: '#F1DFC6' });
+const nightTagPrintMat = new THREE.MeshBasicMaterial({ color: '#5EAF66' });
+const nightBody = nightMesh(new THREE.SphereGeometry(0.68, 14, 10), nightBodyMat, 0, 0.64, 0, 1.12, 1.03, 1.06);
+nightBody.castShadow = true;
+const nightLeftArm = nightMesh(new THREE.SphereGeometry(0.18, 8, 6), nightBodyMat, -0.60, 0.50, 0, 1.08, 0.84, 0.94);
+const nightRightArm = nightMesh(new THREE.SphereGeometry(0.20, 8, 6), nightBodyMat, 0.61, 0.49, 0, 1.18, 0.90, 1.0);
+const nightLeftFoot = nightMesh(new THREE.SphereGeometry(0.22, 8, 6), nightBodyMat, -0.26, 0.07, 0.16, 1.0, 0.74, 1.16);
+const nightRightFoot = nightMesh(new THREE.SphereGeometry(0.22, 8, 6), nightBodyMat, 0.30, 0.08, 0.16, 1.05, 0.76, 1.18);
+addPaw(nightLeftArm, nightBodyMat, -1);
+addPaw(nightRightArm, nightBodyMat, 1);
+
+const nightEyeWhiteMat = new THREE.MeshBasicMaterial({ color: '#EEF2F7' });
+
+const nightEyeL = nightMesh(new THREE.SphereGeometry(0.135, 10, 8), nightEyeWhiteMat, -0.21, 0.665, 0.60, 1.50, 0.98, 0.17);
+const nightEyeR = nightMesh(new THREE.SphereGeometry(0.135, 10, 8), nightEyeWhiteMat,  0.21, 0.665, 0.60, 1.50, 0.98, 0.17);
+nightEyeL.rotation.z = -0.03;
+nightEyeR.rotation.z =  0.03;
+
+const nightLidL = nightMesh(new THREE.BoxGeometry(0.27, 0.038, 0.022), nightLineMat, -0.21, 0.75, 0.61);
+nightLidL.rotation.z = -0.03;
+const nightLidR = nightMesh(new THREE.BoxGeometry(0.27, 0.038, 0.022), nightLineMat,  0.21, 0.75, 0.61);
+nightLidR.rotation.z = 0.03;
+
+const nightInnerL = nightMesh(new THREE.BoxGeometry(0.125, 0.022, 0.02), nightLineMat, -0.21, 0.64, 0.62);
+const nightInnerR = nightMesh(new THREE.BoxGeometry(0.125, 0.022, 0.02), nightLineMat,  0.21, 0.64, 0.62);
+nightInnerL.rotation.z = 0.02;
+nightInnerR.rotation.z = -0.02;
+
+const nightMouth = new THREE.Mesh(
+  new THREE.TubeGeometry(
+    new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.11, 0.39, 0.63),
+      new THREE.Vector3(-0.02, 0.35, 0.65),
+      new THREE.Vector3( 0.06, 0.34, 0.65),
+      new THREE.Vector3( 0.14, 0.38, 0.63),
+    ]),
+    10, 0.014, 6, false
+  ),
+  nightLineMat
+);
+nightFriend.add(nightMouth);
+
+const nightStitch = nightMesh(new THREE.BoxGeometry(0.16, 0.012, 0.02), nightLineMat, -0.48, 0.48, 0.57);
+nightStitch.rotation.z = -0.16;
+[-0.06, 0.00, 0.06].forEach((dx) => {
+  const s = nightMesh(new THREE.BoxGeometry(0.012, 0.035, 0.02), nightLineMat, -0.48 + dx, 0.48, 0.58);
+  s.rotation.z = -0.16;
+});
+
+const nightCurl = new THREE.Mesh(
+  new THREE.TubeGeometry(
+    new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.00, 0.93, 0.38),
+      new THREE.Vector3(0.18, 0.99, 0.38),
+      new THREE.Vector3(0.18, 0.84, 0.40),
+      new THREE.Vector3(0.03, 0.82, 0.42),
+      new THREE.Vector3(-0.02, 0.90, 0.40),
+    ]),
+    18, 0.06, 8, false
+  ),
+  nightDarkMat
+);
+nightFriend.add(nightCurl);
+
+const nightHelmet = nightMesh(new THREE.SphereGeometry(0.60, 14, 10), helmetMat, 0, 1.34, 0, 1.18, 0.84, 1.0);
+nightHelmet.castShadow = false;
+nightMesh(new THREE.TorusGeometry(0.46, 0.02, 6, 20), new THREE.MeshBasicMaterial({ color: '#F8F7FF', transparent: true, opacity: 0.38 }), 0, 1.12, 0, 1, 0.18, 1);
+const nightGlint = nightMesh(new THREE.BoxGeometry(0.30, 0.05, 0.02), helmetGlintMat, -0.14, 1.69, 0.40);
+nightGlint.rotation.z = 0.32;
+
+const nightWord = new THREE.Sprite(new THREE.SpriteMaterial({ map: labelTexture('Night', '#B8BECF', 'rgba(255,255,255,1.0)', 84, 256, 112), transparent: true, depthWrite: false }));
+nightWord.scale.set(1.40, 0.55, 1);
+nightWord.position.set(0, 1.40, 0.48);
+nightFriend.add(nightWord);
+const moonSprite = spriteLabel('☾', '#D7D9E5', 0.32, 0.32, 84);
+moonSprite.position.set(0.30, 1.62, 0.50);
+nightFriend.add(moonSprite);
+[
+  [-0.24, 1.59, 0.16],
+  [ 0.03, 1.72, 0.14],
+  [ 0.16, 1.56, 0.12],
+].forEach(([x, y, s]) => {
+  const star = spriteLabel('★', '#C8CDD8', s, s, 60);
+  star.position.set(x, y, 0.48);
+  nightFriend.add(star);
+});
+
+const nightTag1 = nightMesh(new THREE.BoxGeometry(0.22, 0.18, 0.016), nightTagMat, 0.74, 0.56, 0.18);
+nightTag1.rotation.set(0.18, -0.15, -0.18);
+const nightTag1Icon = nightMesh(new THREE.CylinderGeometry(0.05, 0.05, 0.01, 16), nightTagPrintMat, 0.72, 0.58, 0.195, 1, 1, 1);
+nightTag1Icon.rotation.x = Math.PI / 2;
+const nightTag2 = nightMesh(new THREE.BoxGeometry(0.20, 0.16, 0.016), nightTagMat, 0.45, 0.08, 0.18);
+nightTag2.rotation.set(0.22, -0.35, -0.25);
+const nightTag2Icon = nightMesh(new THREE.CylinderGeometry(0.045, 0.045, 0.01, 16), nightTagPrintMat, 0.43, 0.10, 0.195, 1, 1, 1);
+nightTag2Icon.rotation.x = Math.PI / 2;
+
 // ════════════════════════════════════════════════════════
 //  3D TEXT LABELS (font load → swap sprites)
 // ════════════════════════════════════════════════════════
 seeLabel.visible = false;
 sawLabel.visible = false;
+nightWord.visible = false;
 
 new FontLoader().load(
   'https://threejs.org/examples/fonts/helvetiker_bold.typeface.json',
@@ -614,10 +736,22 @@ new FontLoader().load(
     [
       { word: 'See', color: '#1A7060', group: seeFriend },
       { word: 'Saw', color: '#906828', group: sawFriend },
+      { word: 'Night', color: '#6E7992', group: nightFriend },
     ].forEach(({ word, color, group }) => {
       const geo = new TextGeometry(word, base);
       geo.computeBoundingBox();
       geo.center();
+
+      const outline = new THREE.Mesh(
+        geo.clone(),
+        new THREE.MeshToonMaterial({ color: new THREE.Color('#FFFFFF'), gradientMap })
+      );
+      outline.position.set(0, 1.50, 0.215);
+      outline.rotation.x = -0.25;
+      outline.scale.set(1.12, 1.12, 1.04);
+      outline.castShadow = false;
+      group.add(outline);
+
       const mesh = new THREE.Mesh(
         geo,
         new THREE.MeshToonMaterial({ color: new THREE.Color(color), gradientMap })
@@ -706,19 +840,29 @@ for (let i = 0; i < 8; i++) {
 }
 
 // ════════════════════════════════════════════════════════
-//  SWING (ブランコ)  position: outside the character run ring
+//  SWING (ブランコ)  outer ring / facing center
 // ════════════════════════════════════════════════════════
-const SWX = 1.85, SWZ = -3.25;
+function faceCenterAngle(x, z) {
+  // local +Z を島の中心へ向ける角度
+  return Math.atan2(-x, -z);
+}
+
+const SWX = -1.95, SWZ = -3.15;
 const swingMat = mat('#6A4020');
 const chainMat = new THREE.MeshBasicMaterial({ color: '#A09070' });
 
-// A字フレーム左
+const swingGroup = new THREE.Group();
+swingGroup.position.set(SWX, 0, SWZ);
+swingGroup.rotation.y = faceCenterAngle(SWX, SWZ);
+scene.add(swingGroup);
+
+// A字フレーム。group全体を中心向きに回す
 function swingLeg(ox, oz, rx) {
   const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.055, 2.3, 7), swingMat);
-  leg.position.set(SWX + ox, 1.15, SWZ + oz);
+  leg.position.set(ox, 1.15, oz);
   leg.rotation.x = rx;
   leg.castShadow = true;
-  scene.add(leg);
+  swingGroup.add(leg);
 }
 swingLeg(-0.55,  0.18, -0.14);
 swingLeg(-0.55, -0.18,  0.14);
@@ -728,14 +872,14 @@ swingLeg( 0.55, -0.18,  0.14);
 // 上部クロスバー
 const swingBar = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.25, 8), swingMat);
 swingBar.rotation.z = Math.PI / 2;
-swingBar.position.set(SWX, 2.26, SWZ);
+swingBar.position.set(0, 2.26, 0);
 swingBar.castShadow = true;
-scene.add(swingBar);
+swingGroup.add(swingBar);
 
 // スイングピボット（チェーン＋座面がここを中心に回転）
 const swingPivot = new THREE.Group();
-swingPivot.position.set(SWX, 2.22, SWZ);
-scene.add(swingPivot);
+swingPivot.position.set(0, 2.22, 0);
+swingGroup.add(swingPivot);
 
 [-0.30, 0.30].forEach(cx => {
   const chain = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 1.20, 5), chainMat);
@@ -747,33 +891,35 @@ swingSeat.position.set(0, -1.24, 0);
 swingPivot.add(swingSeat);
 
 // ════════════════════════════════════════════════════════
-//  BENCH (ベンチ)  between the right-side trees, outside the run ring
+//  BENCH (ベンチ)  outer ring / facing center
 // ════════════════════════════════════════════════════════
-const BX = 2.95, BZ = 1.25;
+const BX = 2.65, BZ = 2.10;
 const benchMat  = mat('#8A5A2A');
 const benchLegM = mat('#6A4018');
 
+const benchGroup = new THREE.Group();
+benchGroup.position.set(BX, 0, BZ);
+// ベンチは local -Z が座る向き。背もたれを外側、正面を中心へ向ける
+benchGroup.rotation.y = faceCenterAngle(BX, BZ) + Math.PI;
+scene.add(benchGroup);
+
 // 座面
 const benchSeat = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.07, 0.38), benchMat);
-benchSeat.position.set(BX, 0.46, BZ);
-benchSeat.rotation.y = 0.5;
+benchSeat.position.set(0, 0.46, 0);
 benchSeat.castShadow = true;
-scene.add(benchSeat);
-// 背もたれ
+benchGroup.add(benchSeat);
+
+// 背もたれ。背中側を外周へ逃がす
 const benchBack = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.28, 0.06), benchMat);
-benchBack.position.set(BX + Math.sin(0.5)*0.16, 0.70, BZ + Math.cos(0.5)*0.16);
-benchBack.rotation.y = 0.5;
+benchBack.position.set(0, 0.70, 0.22);
 benchBack.castShadow = true;
-scene.add(benchBack);
+benchGroup.add(benchBack);
+
 // 脚4本
 [[-0.38, -0.12], [-0.38, 0.12], [0.38, -0.12], [0.38, 0.12]].forEach(([lx, lz]) => {
-  const cos05 = Math.cos(0.5), sin05 = Math.sin(0.5);
-  const wx = BX + cos05*lx - sin05*lz;
-  const wz = BZ + sin05*lx + cos05*lz;
   const leg = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.44, 0.07), benchLegM);
-  leg.position.set(wx, 0.22, wz);
-  leg.rotation.y = 0.5;
-  scene.add(leg);
+  leg.position.set(lx, 0.22, lz);
+  benchGroup.add(leg);
 });
 
 // ════════════════════════════════════════════════════════
@@ -851,17 +997,26 @@ const flowerColors = ['#FFD0E0', '#FFE8A0', '#D0E8FF'];
 });
 
 // ════════════════════════════════════════════════════════
-//  CHARACTER RUN ORBIT
-//  CHAR_R   = 0.605  (腕+paw先端までの水平半径)
-//  SEESAW_R = 1.434  (プランク対角線半径)
-//  ORBIT_R  = 2.35   (SEESAW_R + CHAR_R + 0.20 余裕)
-//  Props stay outside roughly radius 3.1, so the running lane remains open.
-//  π離れた配置でキャラ間距離 = 4.7 >> 必要最小 1.21
+//  CHARACTERS ON SEESAW
+//  円軌道で走らせず、板の左右端に固定する。
+//  plank.localToWorld() で板の傾き込みの座標を取る。
 // ════════════════════════════════════════════════════════
-const ORBIT_R = 2.35;
-const ORBIT_SPEED = 0.36;
-let seeOrbitAngle = Math.PI * 0.25;        // 45°スタート
-let sawOrbitAngle = seeOrbitAngle + Math.PI; // 常にπ反対側
+const SEE_SEAT_LOCAL = new THREE.Vector3(-1.16, 0.16, 0);
+const SAW_SEAT_LOCAL = new THREE.Vector3( 1.16, 0.16, 0);
+const seeSeatWorld = new THREE.Vector3();
+const sawSeatWorld = new THREE.Vector3();
+const CHAR_SCALE = 0.66;
+
+const NIGHT_ORBIT_RADIUS = 2.35;
+const NIGHT_ORBIT_BASE_Y = 0.28;
+const NIGHT_ORBIT_START = 1.28;
+function nightOrbitProgress(u) {
+  if (u < 0.78) {
+    const k = u / 0.78;
+    return k * k * (3 - 2 * k); // smoothstep
+  }
+  return 1.0; // stop and watch for a moment
+}
 
 // ════════════════════════════════════════════════════════
 //  ANIMATE
@@ -912,34 +1067,46 @@ renderer.setAnimationLoop(() => {
     s.scale.setScalar(sc);
   });
 
-  // ── Seesaw idle rock ─────────────────────────────────────
-  plank.rotation.z = Math.sin(t * 1.05) * 0.30;
+  // ── Seesaw rock ──────────────────────────────────────────
+  const seesawAngle = Math.sin(t * 2.1) * 0.30; // 初期設定に戻す
+  plank.rotation.z = seesawAngle;
+  seesaw.updateMatrixWorld(true);
 
-  // ── Run orbit (同方向・同速・π離れ → 衝突なし) ──────────
-  seeOrbitAngle += 0.016 * ORBIT_SPEED;
-  sawOrbitAngle += 0.016 * ORBIT_SPEED;
+  // ── Characters fixed on the seesaw ends ─────────────────
+  const playStep = t * 6.4; // キャラのリアクションも2倍速
 
-  // SEE
-  const seeX = Math.cos(seeOrbitAngle) * ORBIT_R;
-  const seeZ = Math.sin(seeOrbitAngle) * ORBIT_R;
-  const runStep = t * 3.2;
-  seeFriend.position.set(seeX, 0.28 + Math.abs(Math.sin(runStep)) * 0.10, seeZ);
-  seeFriend.rotation.y = Math.atan2(-Math.sin(seeOrbitAngle), Math.cos(seeOrbitAngle));
-  seeFriend.rotation.z = Math.sin(runStep) * 0.045;
-  seeLeftArm.rotation.z  =  0.3 + Math.sin(runStep) * 0.24;
-  seeRightArm.rotation.z = -0.3 - Math.sin(runStep) * 0.24;
-  foreheadCurl.rotation.z = Math.sin(t * 4.2 + 0.4) * 0.07;
-  seeHelmet.rotation.z    = Math.sin(t * 4.6 + 0.2) * 0.035;
+  plank.localToWorld(seeSeatWorld.copy(SEE_SEAT_LOCAL));
+  plank.localToWorld(sawSeatWorld.copy(SAW_SEAT_LOCAL));
 
-  // SAW (seeOrbitAngle + π で常に反対側)
-  const sawX = Math.cos(sawOrbitAngle) * ORBIT_R;
-  const sawZ = Math.sin(sawOrbitAngle) * ORBIT_R;
-  sawFriend.position.set(sawX, 0.28 + Math.abs(Math.sin(runStep + Math.PI)) * 0.10, sawZ);
-  sawFriend.rotation.y = Math.atan2(-Math.sin(sawOrbitAngle), Math.cos(sawOrbitAngle));
-  sawFriend.rotation.z = Math.sin(runStep + Math.PI) * 0.045;
-  sawLeftArm.rotation.z  =  0.22 + Math.sin(runStep + Math.PI) * 0.22;
-  sawRightArm.rotation.z = -0.22 - Math.sin(runStep + Math.PI) * 0.22;
-  sawHelmet.rotation.z   = Math.sin(t * 3.2 + 1.8) * 0.03;
+  const seeUp = Math.max(0, -seesawAngle);
+  const sawUp = Math.max(0,  seesawAngle);
+  const seeDown = Math.max(0,  seesawAngle);
+  const sawDown = Math.max(0, -seesawAngle);
+
+  // キャラ同士が向かい合うように、板の左右端を結ぶ方向へ向ける
+  const faceAngle = Math.atan2(
+    sawSeatWorld.x - seeSeatWorld.x,
+    sawSeatWorld.z - seeSeatWorld.z
+  );
+
+  // SEE: 左端に固定。SAW側を向く
+  seeFriend.position.set(seeSeatWorld.x, seeSeatWorld.y + seeUp * 0.10, seeSeatWorld.z);
+  seeFriend.rotation.y = faceAngle;
+  seeFriend.rotation.z = seesawAngle * 0.55 + Math.sin(playStep) * 0.025;
+  seeFriend.scale.set(CHAR_SCALE * (1 + seeDown * 0.12), CHAR_SCALE * (1 - seeDown * 0.10), CHAR_SCALE);
+  seeLeftArm.rotation.z  =  0.35 + Math.sin(playStep) * 0.18 + seeUp * 0.35;
+  seeRightArm.rotation.z = -0.35 - Math.sin(playStep) * 0.18 - seeUp * 0.35;
+  foreheadCurl.rotation.z = Math.sin(t * 8.4 + 0.4) * 0.07;
+  seeHelmet.rotation.z    = Math.sin(t * 9.2 + 0.2) * 0.035;
+
+  // SAW: 右端に固定。SEE側を向く
+  sawFriend.position.set(sawSeatWorld.x, sawSeatWorld.y + sawUp * 0.10, sawSeatWorld.z);
+  sawFriend.rotation.y = faceAngle + Math.PI;
+  sawFriend.rotation.z = seesawAngle * 0.55 + Math.sin(playStep + Math.PI) * 0.025;
+  sawFriend.scale.set(CHAR_SCALE * (1 + sawDown * 0.12), CHAR_SCALE * (1 - sawDown * 0.10), CHAR_SCALE);
+  sawLeftArm.rotation.z  =  0.27 + Math.sin(playStep + Math.PI) * 0.16 + sawUp * 0.30;
+  sawRightArm.rotation.z = -0.27 - Math.sin(playStep + Math.PI) * 0.16 - sawUp * 0.30;
+  sawHelmet.rotation.z   = Math.sin(t * 6.4 + 1.8) * 0.03;
 
   // ── Labels & notes ───────────────────────────────────────
   seeLabel.position.y = 1.32 + Math.sin(t * 3.1) * 0.018;
@@ -948,6 +1115,35 @@ renderer.setAnimationLoop(() => {
     note.position.y = note.userData.baseY + Math.sin(t * 3.5 + i) * 0.012;
     note.rotation.z = Math.sin(t * 4.2 + i) * 0.12;
   });
+
+
+  // ── Night orbit: ぽよぽよ歩き + stop-and-watch ───────────
+  const nightCycle = (t * 0.036) % 1; // かなりゆっくり一周
+  const nightProgress = nightOrbitProgress(nightCycle);
+  const nightAngle = NIGHT_ORBIT_START + nightProgress * Math.PI * 2;
+  const nightMoving = nightCycle < 0.78 ? 1.0 : 0.16;
+  const nightWalkPhase = t * 4.2;
+  const nightBounce = Math.sin(nightWalkPhase) * nightMoving;
+  const nightBob = Math.abs(Math.sin(nightWalkPhase)) * 0.04 * nightMoving + Math.sin(t * 1.6) * 0.008;
+  const nightX = seesaw.position.x + Math.cos(nightAngle) * NIGHT_ORBIT_RADIUS;
+  const nightZ = seesaw.position.z + Math.sin(nightAngle) * NIGHT_ORBIT_RADIUS;
+  // 円の中心ではなく、円の進行方向へ向ける
+  const nightMoveDir = Math.atan2(-Math.sin(nightAngle), Math.cos(nightAngle));
+
+  nightFriend.position.set(nightX, NIGHT_ORBIT_BASE_Y + nightBob, nightZ);
+  nightFriend.rotation.y = nightMoveDir + Math.sin(t * 1.2) * 0.035;
+  nightFriend.rotation.z = Math.sin(t * 2.4) * 0.012 + nightBounce * 0.012;
+  nightFriend.scale.set(0.68 - Math.abs(nightBounce) * 0.012, 0.68 + Math.abs(nightBounce) * 0.018, 0.68);
+
+  nightLeftArm.rotation.z = 0.16 + nightBounce * 0.09;
+  nightRightArm.rotation.z = -0.16 - nightBounce * 0.09;
+  nightLeftFoot.position.y = 0.07 + Math.max(0,  Math.sin(nightWalkPhase)) * 0.03 * nightMoving;
+  nightRightFoot.position.y = 0.08 + Math.max(0, -Math.sin(nightWalkPhase)) * 0.03 * nightMoving;
+  nightLeftFoot.rotation.x =  nightBounce * 0.055;
+  nightRightFoot.rotation.x = -nightBounce * 0.055;
+  nightCurl.rotation.z = Math.sin(t * 2.5 + 0.8) * 0.05;
+  nightHelmet.rotation.z = Math.sin(t * 2.9 + 0.2) * 0.02 + nightBounce * 0.01;
+  moonSprite.rotation.z = Math.sin(t * 1.3) * 0.15;
 
   // Shooting stars
   shootingStars.forEach((star) => {
